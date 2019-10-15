@@ -1,24 +1,32 @@
 import socket
+import threading
 
 
 class TelloState:
     def __init__(self, address="192.168.10.1", port=8890) -> None:
         self.port: int = port
         self.socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.bind(("0.0.0.0", self.port))
 
         self.continue_loop: bool = True
-        self.recv_callback = None
+        self.recv_thread: threading.Thread = threading.Thread(target=self._recv_loop)
+        self._recvdata = None
+
+        self.socket.bind(("0.0.0.0", self.port))
+
+    @property
+    def data(self) -> None:
+        return self._recvdata
 
     def recv_data(self) -> str:
         data, address = self.socket.recvfrom(1024)
         return str(data)
 
-    def start(self) -> None:
+    def recv_start(self) -> None:
+        self.recv_thread.start()
+
+    def _recv_loop(self) -> None:
         while self.continue_loop:
-            data = self.recv_data()
-            if self.recv_callback:
-                self.recv_callback(data)
+            self._recvdata = self.recv_data()
 
 
 class TelloCommand:

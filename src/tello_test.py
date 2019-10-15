@@ -119,5 +119,23 @@ def test_tello_state_recieves_data(mock_socket):
 
 
 @patch("tello.socket", autospec=True)
-def test_tello_state_recvloop_stops(mock_socket):
-    pass
+def test_tello_state_runs_recv_loop_thread(mock_socket):
+    stateserver, mock_socket_object = _setup_tello_state_obj(mock_socket)
+    mock_socket_object.recvfrom.return_value = ("test data", "127.0.0.1")
+
+    # This test will block ending if the loop stopping logic isnt working.
+    stateserver.recv_start()
+    stateserver.continue_loop = False
+
+    mock_socket_object.recvfrom.assert_called()
+
+
+@patch("tello.socket", autospec=True)
+def test_tello_state_recv_loop_sets_returned_data_property(mock_socket):
+    stateserver, mock_socket_object = _setup_tello_state_obj(mock_socket)
+    mock_socket_object.recvfrom.return_value = ("test data", "127.0.0.1")
+
+    stateserver.recv_start()
+    stateserver.continue_loop = False
+
+    assert stateserver.data == "test data"
