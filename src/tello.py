@@ -7,6 +7,19 @@ class TelloState:
         self.socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind("0.0.0.0", self.port)
 
+        self.continue_loop: bool = True
+        self.recv_callback = None
+
+    def recv_data(self) -> str:
+        data, address = self.socket.recvfrom(1024)
+        return data
+
+    def start(self) -> None:
+        while self.continue_loop:
+            data = self.recv_data()
+            if self.recv_callback:
+                self.recv_callback(data)
+
 
 class TelloCommand:
     def __init__(self, address="192.168.10.1", port=8889) -> None:
