@@ -21,7 +21,7 @@ class TelloState:
         data, address = self.socket.recvfrom(1024)
         if data:
             return data.decode("UTF-8")
-        return None
+        return ""
 
     def recv_start(self) -> None:
         self.recv_thread.start()
