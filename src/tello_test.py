@@ -108,17 +108,20 @@ def test_tello_right_command(mock_tellostate, mock_socket):
 def _setup_tello_state_obj(mock_socket):
     mock_socket_object = create_autospec(socket.socket)
 
-    mock_socket_object.recvfrom.return_value = ("test data", "127.0.0.1")
+    mock_socket_object.recvfrom.return_value = (
+        "test data".encode("UTF-8"),
+        "127.0.0.1",
+    )
     mock_socket.socket.return_value = mock_socket_object
 
-    state = tello.TelloState()
+    state = tello.TelloState(8889)
     return state, mock_socket_object
 
 
 @patch("tello.socket", autospec=True)
 def test_tello_state_server(mock_socket):
     stateserver, mock_socket_object = _setup_tello_state_obj(mock_socket)
-    mock_socket_object.bind.assert_called_with(("0.0.0.0", 8890))
+    mock_socket_object.bind.assert_called_with(("", 8889))
 
 
 @patch("tello.socket", autospec=True)
