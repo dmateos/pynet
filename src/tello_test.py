@@ -20,7 +20,7 @@ def _setup_tello_command_obj(mock_socket):
 @patch("tello.socket", autospec=True)
 def test_tello_sends_initial_sdk_command(mock_socket):
     robot, mock_socket_object = _setup_tello_command_obj(mock_socket)
-    _assert_socket_sendto("Command", mock_socket_object)
+    _assert_socket_sendto("command", mock_socket_object)
 
 
 @patch("tello.socket", autospec=True)
@@ -58,6 +58,41 @@ def test_tello_land_command(mock_socket):
     _assert_socket_sendto("land", mock_socket_object)
 
 
+@patch("tello.socket", autospec=True)
+def test_tello_rotate_command(mock_socket):
+    robot, mock_socket_object = _setup_tello_command_obj(mock_socket)
+    robot.rotate(360)
+    _assert_socket_sendto("cw {}".format(360), mock_socket_object)
+
+
+@patch("tello.socket", autospec=True)
+def test_tello_forward_command(mock_socket):
+    robot, mock_socket_object = _setup_tello_command_obj(mock_socket)
+    robot.forward(20)
+    _assert_socket_sendto("forward {}".format(20), mock_socket_object)
+
+
+@patch("tello.socket", autospec=True)
+def test_tello_back_command(mock_socket):
+    robot, mock_socket_object = _setup_tello_command_obj(mock_socket)
+    robot.back(20)
+    _assert_socket_sendto("back {}".format(20), mock_socket_object)
+
+
+@patch("tello.socket", autospec=True)
+def test_tello_left_command(mock_socket):
+    robot, mock_socket_object = _setup_tello_command_obj(mock_socket)
+    robot.left(20)
+    _assert_socket_sendto("left {}".format(20), mock_socket_object)
+
+
+@patch("tello.socket", autospec=True)
+def test_tello_right_command(mock_socket):
+    robot, mock_socket_object = _setup_tello_command_obj(mock_socket)
+    robot.right(20)
+    _assert_socket_sendto("right {}".format(20), mock_socket_object)
+
+
 # TelloState
 def _setup_tello_state_obj(mock_socket):
     mock_socket_object = create_autospec(socket.socket)
@@ -69,7 +104,7 @@ def _setup_tello_state_obj(mock_socket):
 @patch("tello.socket", autospec=True)
 def test_tello_state_server(mock_socket):
     stateserver, mock_socket_object = _setup_tello_state_obj(mock_socket)
-    mock_socket_object.bind.assert_called_with("0.0.0.0", 8890)
+    mock_socket_object.bind.assert_called_with(("0.0.0.0", 8890))
 
 
 @patch("tello.socket", autospec=True)
