@@ -3,7 +3,6 @@ import tello
 
 def run():
     robot = tello.TelloCommand()
-    robot_state = tello.TelloState()
 
     print("taking off")
     robot.takeoff()
@@ -16,7 +15,6 @@ def run():
 
     print("landing")
     robot.land()
-    print(robot_state.recv_data())
 
 
 if __name__ == "__main__":

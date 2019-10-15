@@ -35,6 +35,9 @@ class TelloCommand:
         self.port: int = port
         self.socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+        self.tello_state = TelloState(address)
+        self.tello_state.recv_start()
+
         # Enter SDK mode
         self.send_command("command")
 
