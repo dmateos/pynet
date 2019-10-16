@@ -5,7 +5,9 @@ import udpserver
 
 
 class TelloCommand:
-    def __init__(self, timeout:int =30, address: str = "192.168.10.1", port: int = 8889) -> None:
+    def __init__(
+        self, timeout: int = 30, address: str = "192.168.10.1", port: int = 8889
+    ) -> None:
         self.address: str = address
         self.port: int = port
         self.timeout: int = timeout
