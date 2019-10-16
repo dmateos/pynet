@@ -14,7 +14,6 @@ class TelloCommand:
 
         self.socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.tello_state: udpserver.UDPServer = udpserver.UDPServer(port, self.socket)
-        self.timer = threading.Timer(self.timeout, self._command_wait_timeout_stop_loop)
 
         self.command_timeout: bool = False
 
@@ -26,12 +25,15 @@ class TelloCommand:
 
     def send_command(self, command: str, ignorecheck: bool = False) -> None:
         self.socket.sendto(command.encode("UTF-8"), (self.address, self.port))
+        cmd_timer: threading.Timer = threading.Timer(
+            self.timeout, self._command_wait_timeout_stop_loop
+        )
 
         if not ignorecheck:
-            self._command_wait_timeout()
+            cmd_timer.start()
             while self.tello_state.data == "" and not self.command_timeout:
                 pass
-            self.timer.cancel()
+            cmd_timer.cancel()
             self.command_timeout = False
 
     def takeoff(self) -> None:
@@ -55,8 +57,6 @@ class TelloCommand:
     def right(self, x: int) -> None:
         self.send_command("right {}".format(x))
 
-    def _command_wait_timeout_stop_loop(self):
+    def _command_wait_timeout_stop_loop(self) -> None:
         self.command_timeout = True
-
-    def _command_wait_timeout(self):
-        self.timer.start()
+        print("command timed out")

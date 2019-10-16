@@ -1,5 +1,6 @@
 from unittest.mock import patch, Mock
 import udpserver
+import time
 
 
 # UDPServer
@@ -23,6 +24,20 @@ def test_udpserver_binds_to_supplied_socket():
     test_socket = Mock()
     udpserver.UDPServer(8889, test_socket)
     test_socket.bind.assert_called_with(("", 8889))
+
+
+@patch("udpserver.socket.socket", autospec=True)
+def test_udpserver_data_empty_str_by_default(mock_socket):
+    server = udpserver.UDPServer(8889)
+    assert server.data == ""
+
+
+@patch("udpserver.socket.socket", autospec=True)
+def test_udpserver_resets_data_on_read(mock_socket):
+    server = udpserver.UDPServer(8889)
+    server._recvdata = "test"
+    server.data
+    assert server.data == ""
 
 
 @patch("udpserver.socket.socket", autospec=True)
@@ -52,5 +67,8 @@ def test_udpserver_state_recv_loop_sets_returned_data_property(mock_socket):
 
     stateserver.recv_start()
     stateserver.continue_loop = False
+
+    # Thread can take some time.
+    time.sleep(1)
 
     assert stateserver.data == "test data"

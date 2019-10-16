@@ -19,15 +19,19 @@ class UDPServer:
         self.recv_thread: threading.Thread = threading.Thread(target=self._recv_loop)
         self._recvdata: str = ""
 
+        self._recvdata = ""
         self.socket.bind(("", self.port))
 
     @property
     def data(self) -> str:
-        return self._recvdata
+        d = self._recvdata
+        self._recvdata = ""
+        return d
 
     def recv_data(self) -> str:
         data, address = self.socket.recvfrom(1024)
         if data:
+            print("data is {}".format(data))
             return data.decode("UTF-8")
         return ""
 
