@@ -1,20 +1,50 @@
 import tello
+import time
+import pygame
+import pygame.display
+import pygame.key
+import pygame.locals
+
+
+controls = {
+    'w': 'forward',
+    's': 'back',
+    'a': 'left',
+    'd': 'right',
+    'e': 'rotate',
+    # arrow keys for fast turns and altitude adjustments
+    'tab': lambda drone, speed: drone.takeoff(),
+    'backspace': lambda drone, speed: drone.land(),
+}
 
 
 def run():
-    robot = tello.TelloCommand()
+    drone = tello.TelloCommand(3)
 
-    print("taking off")
-    robot.takeoff()
+    pygame.init()
+    pygame.display.init()
+    pygame.display.set_mode((1280, 720))
 
-    print("rotate and sleep")
-    robot.rotate(180)
+    speed = 30
 
-    print("do a little dance")
-    robot.left(20)
-
-    print("landing")
-    robot.land()
+    while True:
+        time.sleep(0.1)
+        for e in pygame.event.get():
+            if e.type == pygame.locals.KEYDOWN:
+                keyname = pygame.key.name(e.key)
+                if keyname in controls:
+                    key_handler = controls[keyname]
+                    if type(key_handler) == str:
+                        getattr(drone, key_handler)(speed)
+                    else:
+                        key_handler(drone, speed)
+            elif e.type == pygame.locals.KEYUP:
+                if keyname in controls:
+                    key_handler = controls[keyname]
+                    if type(key_handler) == str:
+                        getattr(drone, key_handler)(0)
+                    else:
+                        key_handler(drone, 0)
 
 
 if __name__ == "__main__":
