@@ -6,9 +6,9 @@ import udpserver
 
 class TelloCommand:
     def __init__(
-        self, timeout: int = 30, address: str = "192.168.10.1", port: int = 8889
+        self, timeout: int = 30, addr: str = "192.168.10.1", port: int = 8889
     ) -> None:
-        self.address: str = address
+        self.address: str = addr
         self.port: int = port
         self.timeout: int = timeout
 
@@ -36,6 +36,10 @@ class TelloCommand:
             cmd_timer.cancel()
             self.command_timeout = False
 
+    def _command_wait_timeout_stop_loop(self) -> None:
+        self.command_timeout = True
+        print("command timed out")
+
     def takeoff(self) -> None:
         self.send_command("takeoff")
 
@@ -57,6 +61,11 @@ class TelloCommand:
     def right(self, x: int) -> None:
         self.send_command("right {}".format(x))
 
-    def _command_wait_timeout_stop_loop(self) -> None:
-        self.command_timeout = True
-        print("command timed out")
+    def rc(self, a: int, b: int, c: int, d: int):
+        self.send_command("rc {} {} {} {}".format(a, b, c, d))
+
+    def streamon(self):
+        self.send_command("streamon")
+
+    def streamoff(self):
+        self.send_command("streamoff")

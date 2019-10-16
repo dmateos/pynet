@@ -1,7 +1,5 @@
-from unittest.mock import patch, create_autospec
+from unittest.mock import patch
 import tello
-import socket
-import udpserver
 
 
 # TelloCommand
@@ -14,7 +12,7 @@ def _assert_socket_sendto(command: str, socket_obj):
 @patch("tello.socket.socket", autospec=True)
 @patch("tello.udpserver.UDPServer", autospec=True)
 def test_tello_sends_initial_sdk_command(mock_udpserver, mock_socket):
-    robot = tello.TelloCommand()
+    tello.TelloCommand()
     _assert_socket_sendto("command", mock_socket)
 
 
@@ -110,3 +108,27 @@ def test_tello_right_command(mock_udpserver, mock_socket):
     robot = tello.TelloCommand()
     robot.right(20)
     _assert_socket_sendto("right {}".format(20), mock_socket)
+
+
+@patch("tello.socket.socket", autospec=True)
+@patch("tello.udpserver.UDPServer", autospec=True)
+def test_tello_rc_command(mock_udpserver, mock_socket):
+    robot = tello.TelloCommand()
+    robot.rc(5, 5, 5, 5)
+    _assert_socket_sendto("rc {} {} {} {}".format(5, 5, 5, 5), mock_socket)
+
+
+@patch("tello.socket.socket", autospec=True)
+@patch("tello.udpserver.UDPServer", autospec=True)
+def test_tello_streamon_command(mock_udpserver, mock_socket):
+    robot = tello.TelloCommand()
+    robot.streamon()
+    _assert_socket_sendto("streamon", mock_socket)
+
+
+@patch("tello.socket.socket", autospec=True)
+@patch("tello.udpserver.UDPServer", autospec=True)
+def test_tello_streamoff_command(mock_udpserver, mock_socket):
+    robot = tello.TelloCommand()
+    robot.streamoff()
+    _assert_socket_sendto("streamoff", mock_socket)
