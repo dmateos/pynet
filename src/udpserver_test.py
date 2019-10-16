@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 import udpserver
 
 
@@ -17,6 +17,12 @@ def _setup_udpserver(mock_socket):
 def test_udpserver_server_binds_to_socket(mock_socket):
     _setup_udpserver(mock_socket)
     mock_socket.return_value.bind.assert_called_with(("", 8889))
+
+
+def test_udpserver_binds_to_supplied_socket():
+    test_socket = Mock()
+    udpserver.UDPServer(8889, test_socket)
+    test_socket.bind.assert_called_with(("", 8889))
 
 
 @patch("udpserver.socket.socket", autospec=True)

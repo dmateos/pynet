@@ -3,9 +3,14 @@ import threading
 
 
 class UDPServer:
-    def __init__(self, port: int) -> None:
+    def __init__(self, port: int, supplied_socket: socket.socket = None) -> None:
         self.port: int = port
-        self.socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        if supplied_socket:
+            self.socket = supplied_socket
+        else:
+            self.socket: socket.socket = socket.socket(
+                socket.AF_INET, socket.SOCK_DGRAM
+            )
         self.socket.bind(("", self.port))
 
         self.continue_loop: bool = True
