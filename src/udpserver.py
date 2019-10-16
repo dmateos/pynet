@@ -1,21 +1,25 @@
+from typing import Optional
+
 import socket
 import threading
 
 
 class UDPServer:
-    def __init__(self, port: int, supplied_socket: socket.socket = None) -> None:
+    def __init__(
+        self, port: int, supplied_socket: Optional[socket.socket] = None
+    ) -> None:
         self.port: int = port
         if supplied_socket:
-            self.socket = supplied_socket
+            sock = supplied_socket
         else:
-            self.socket: socket.socket = socket.socket(
-                socket.AF_INET, socket.SOCK_DGRAM
-            )
-        self.socket.bind(("", self.port))
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+        self.socket: socket.socket = sock
         self.continue_loop: bool = True
         self.recv_thread: threading.Thread = threading.Thread(target=self._recv_loop)
         self._recvdata: str = ""
+
+        self.socket.bind(("", self.port))
 
     @property
     def data(self) -> str:

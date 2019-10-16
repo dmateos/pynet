@@ -13,7 +13,7 @@ class TelloCommand:
         self.timeout: int = timeout
 
         self.socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.tello_state: udpserver.UDPServer = udpserver.UDPServer(port)
+        self.tello_state: udpserver.UDPServer = udpserver.UDPServer(port, self.socket)
         self.timer = threading.Timer(self.timeout, self._command_wait_timeout_stop_loop)
 
         self.command_timeout: bool = False
