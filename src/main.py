@@ -7,14 +7,14 @@ import pygame.locals
 
 
 controls = {
-    'w': 'forward',
-    's': 'back',
-    'a': 'left',
-    'd': 'right',
-    'e': 'rotate',
+    "w": "forward",
+    "s": "back",
+    "a": "left",
+    "d": "right",
+    "e": "rotate",
     # arrow keys for fast turns and altitude adjustments
-    'tab': lambda drone, speed: drone.takeoff(),
-    'backspace': lambda drone, speed: drone.land(),
+    "tab": lambda drone, speed: drone.takeoff(),
+    "backspace": lambda drone, speed: drone.land(),
 }
 
 
