@@ -13,14 +13,15 @@ controls = {
     "s": "rc_backward",
     "a": "rc_left",
     "d": "rc_right",
-    "e": "rc_rotatec",
-    "r": "rc_rotateq",
-    "f": "rc_up",
-    "g": "rc_down",
-    "c": lambda robot, speed: adjust_speed(10),
-    "v": lambda robot, speed: adjust_speed(-10),
+    "left": "rc_rotatec",
+    "right": "rc_rotateq",
+    "up": "rc_up",
+    "down": "rc_down",
+    "e": lambda robot, speed: adjust_speed(10),
+    "q": lambda robot, speed: adjust_speed(-10),
     "tab": lambda robot, speed: robot.takeoff(),
     "backspace": lambda robot, speed: robot.land(),
+    "r": lambda robot, speed: robot.streamon(),
 }
 
 

@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 
 import socket
 import threading
@@ -11,19 +11,20 @@ class UDPServer:
         self, port: int, supplied_socket: Optional[socket.socket] = None
     ) -> None:
         self.port: int = port
+
+        # Optionally use a user supplied socket
         if supplied_socket:
             sock = supplied_socket
         else:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
         self.socket: socket.socket = sock
+        self._recvdata: str = EMPTY
+
+        # We run the the receiver in a thread until asked to stop.
         self.continue_loop: bool = True
         self.recv_thread: threading.Thread = threading.Thread(target=self._recv_loop)
-        self._recvdata: str = ""
 
-        self.callbacks: List = []
-
-        self._recvdata = EMPTY
         self.socket.bind(("", self.port))
 
     @property
