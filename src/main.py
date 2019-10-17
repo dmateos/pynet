@@ -7,12 +7,14 @@ import pygame.locals
 
 
 controls = {
-    "w": "forward",
-    "s": "back",
-    "a": "left",
-    "d": "right",
-    "e": "rotate",
-    # arrow keys for fast turns and altitude adjustments
+    "w": "rc_forward",
+    "s": "rc_backward",
+    "a": "rc_left",
+    "d": "rc_right",
+    "e": "rc_rotatec",
+    "r": "rc_rotateq",
+    "f": "rc_up",
+    "g": "rc_down",
     "tab": lambda drone, speed: drone.takeoff(),
     "backspace": lambda drone, speed: drone.land(),
 }
@@ -28,7 +30,7 @@ def run():
     speed = 30
 
     while True:
-        time.sleep(0.1)
+        time.sleep(0.5)
         for e in pygame.event.get():
             if e.type == pygame.locals.KEYDOWN:
                 keyname = pygame.key.name(e.key)
