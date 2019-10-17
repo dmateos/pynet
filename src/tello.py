@@ -67,32 +67,32 @@ class TelloCommand:
     def right(self, x: int) -> None:
         self.send_command("right {}".format(x))
 
-    def rc_forward(self, x: int):
+    def rc_forward(self, x: int) -> None:
         self.send_command("rc 0 {} 0 0".format(x), True)
 
-    def rc_backward(self, x: int):
+    def rc_backward(self, x: int) -> None:
         self.send_command("rc 0 {} 0 0".format(-x), True)
 
-    def rc_left(self, x: int):
+    def rc_left(self, x: int) -> None:
         self.send_command("rc {} 0 0 0".format(-x), True)
 
-    def rc_right(self, x: int):
+    def rc_right(self, x: int) -> None:
         self.send_command("rc {} 0 0 0".format(x), True)
 
-    def rc_up(self, x: int):
+    def rc_up(self, x: int) -> None:
         self.send_command("rc 0 0 {} 0".format(x), True)
 
-    def rc_down(self, x: int):
+    def rc_down(self, x: int) -> None:
         self.send_command("rc 0 0 {} 0".format(-x), True)
 
-    def rc_rotatec(self, x: int):
+    def rc_rotatec(self, x: int) -> None:
         self.send_command("rc 0 0 0 {}".format(x), True)
 
-    def rc_rotateq(self, x: int):
+    def rc_rotateq(self, x: int) -> None:
         self.send_command("rc 0 0 0 {}".format(-x), True)
 
-    def streamon(self):
+    def streamon(self) -> None:
         self.send_command("streamon")
 
-    def streamoff(self):
+    def streamoff(self) -> None:
         self.send_command("streamoff")
