@@ -9,19 +9,21 @@ import pygame.locals
 SPEED = 30
 
 controls = {
-    "w": "rc_forward",
-    "s": "rc_backward",
-    "a": "rc_left",
-    "d": "rc_right",
-    "left": "rc_rotatec",
-    "right": "rc_rotateq",
-    "up": "rc_up",
-    "down": "rc_down",
+    "w": lambda robot, speed: robot.rc_forward(speed),
+    "s": lambda robot, speed: robot.rc_backward(speed),
+    "a": lambda robot, speed: robot.rc_left(speed),
+    "d": lambda robot, speed: robot.rc_right(speed),
+    "left": lambda robot, speed: robot.rc_left(speed),
+    "right": lambda robot, speed: robot.rc_right(speed),
+    "up": lambda robot, speed: robot.rc_up(speed),
+    "down": lambda robot, speed: robot.rc_down(speed),
     "e": lambda robot, speed: adjust_speed(10),
     "q": lambda robot, speed: adjust_speed(-10),
     "tab": lambda robot, speed: robot.takeoff(),
     "backspace": lambda robot, speed: robot.land(),
     "r": lambda robot, speed: robot.streamon(),
+    "t": lambda robot, speed: robot.flip("f"),
+    "y": lambda robot, speed: robot.flip("b"),
 }
 
 
@@ -56,18 +58,11 @@ def run():
             if e.type == pygame.locals.KEYDOWN:
                 keyname = pygame.key.name(e.key)
                 if keyname in controls:
-                    key_handler = controls[keyname]
-                    if type(key_handler) == str:
-                        getattr(robot, key_handler)(SPEED)
-                    else:
-                        key_handler(robot, SPEED)
+                    controls[keyname](robot, SPEED)
             elif e.type == pygame.locals.KEYUP:
                 if keyname in controls:
                     key_handler = controls[keyname]
-                    if type(key_handler) == str:
-                        getattr(robot, key_handler)(0)
-                    else:
-                        key_handler(robot, 0)
+                    controls[keyname](robot, 0)
 
 
 if __name__ == "__main__":
