@@ -22,7 +22,7 @@ def test_tello_default_address_and_port_correct(mock_udpserver, mock_socket):
     robot = tello.TelloCommand()
     assert robot.address == "192.168.10.1"
     assert robot.port == 8889
-    assert robot.timeout == 30
+    assert robot.timeout == 3
 
 
 @patch("tello.socket.socket", autospec=True)
@@ -72,63 +72,59 @@ def test_tello_land_command(mock_udpserver, mock_socket):
 
 @patch("tello.socket.socket", autospec=True)
 @patch("tello.udpserver.UDPServer", autospec=True)
-def test_tello_rotate_command(mock_udpserver, mock_socket):
-    robot = tello.TelloCommand()
-    robot.rotate(360)
-    _assert_socket_sendto("cw {}".format(360), mock_socket)
-
-
-@patch("tello.socket.socket", autospec=True)
-@patch("tello.udpserver.UDPServer", autospec=True)
-def test_tello_forward_command(mock_udpserver, mock_socket):
+def test_tello_movement_commands(mock_udpserver, mock_socket):
     robot = tello.TelloCommand()
     robot.forward(20)
     _assert_socket_sendto("forward {}".format(20), mock_socket)
 
-
-@patch("tello.socket.socket", autospec=True)
-@patch("tello.udpserver.UDPServer", autospec=True)
-def test_tello_back_command(mock_udpserver, mock_socket):
-    robot = tello.TelloCommand()
     robot.back(20)
     _assert_socket_sendto("back {}".format(20), mock_socket)
 
-
-@patch("tello.socket.socket", autospec=True)
-@patch("tello.udpserver.UDPServer", autospec=True)
-def test_tello_left_command(mock_udpserver, mock_socket):
-    robot = tello.TelloCommand()
     robot.left(20)
     _assert_socket_sendto("left {}".format(20), mock_socket)
 
-
-@patch("tello.socket.socket", autospec=True)
-@patch("tello.udpserver.UDPServer", autospec=True)
-def test_tello_right_command(mock_udpserver, mock_socket):
-    robot = tello.TelloCommand()
     robot.right(20)
     _assert_socket_sendto("right {}".format(20), mock_socket)
 
+    robot.rotate(20)
+    _assert_socket_sendto("cw {}".format(20), mock_socket)
+
 
 @patch("tello.socket.socket", autospec=True)
 @patch("tello.udpserver.UDPServer", autospec=True)
-def test_tello_rc_command(mock_udpserver, mock_socket):
+def test_tello_rc_movement_commands(mock_udpserver, mock_socket):
     robot = tello.TelloCommand()
-    robot.rc(5, 5, 5, 5)
-    _assert_socket_sendto("rc {} {} {} {}".format(5, 5, 5, 5), mock_socket)
+    robot.rc_forward(10)
+    _assert_socket_sendto("rc 0 {} 0 0".format(10), mock_socket)
+
+    robot.rc_backward(10)
+    _assert_socket_sendto("rc 0 {} 0 0".format(-10), mock_socket)
+
+    robot.rc_left(10)
+    _assert_socket_sendto("rc {} 0 0 0".format(-10), mock_socket)
+
+    robot.rc_right(10)
+    _assert_socket_sendto("rc {} 0 0 0".format(10), mock_socket)
+
+    robot.rc_up(10)
+    _assert_socket_sendto("rc 0 0 {} 0".format(10), mock_socket)
+
+    robot.rc_down(10)
+    _assert_socket_sendto("rc 0 0 {} 0".format(-10), mock_socket)
+
+    robot.rc_rotatec(10)
+    _assert_socket_sendto("rc 0 0 0 {}".format(10), mock_socket)
+
+    robot.rc_rotateq(10)
+    _assert_socket_sendto("rc 0 0 0 {}".format(-10), mock_socket)
 
 
 @patch("tello.socket.socket", autospec=True)
 @patch("tello.udpserver.UDPServer", autospec=True)
-def test_tello_streamon_command(mock_udpserver, mock_socket):
+def test_tello_stream_commands(mock_udpserver, mock_socket):
     robot = tello.TelloCommand()
     robot.streamon()
     _assert_socket_sendto("streamon", mock_socket)
 
-
-@patch("tello.socket.socket", autospec=True)
-@patch("tello.udpserver.UDPServer", autospec=True)
-def test_tello_streamoff_command(mock_udpserver, mock_socket):
-    robot = tello.TelloCommand()
     robot.streamoff()
     _assert_socket_sendto("streamoff", mock_socket)

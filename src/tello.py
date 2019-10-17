@@ -6,7 +6,7 @@ import udpserver
 
 class TelloCommand:
     def __init__(
-        self, timeout: int = 30, addr: str = "192.168.10.1", port: int = 8889
+        self, timeout: int = 3, addr: str = "192.168.10.1", port: int = 8889
     ) -> None:
         self.address: str = addr
         self.port: int = port
@@ -61,8 +61,29 @@ class TelloCommand:
     def right(self, x: int) -> None:
         self.send_command("right {}".format(x))
 
-    def rc(self, a: int, b: int, c: int, d: int):
-        self.send_command("rc {} {} {} {}".format(a, b, c, d))
+    def rc_forward(self, x: int):
+        self.send_command("rc 0 {} 0 0".format(x), True)
+
+    def rc_backward(self, x: int):
+        self.send_command("rc 0 {} 0 0".format(-x), True)
+
+    def rc_left(self, x: int):
+        self.send_command("rc {} 0 0 0".format(-x), True)
+
+    def rc_right(self, x: int):
+        self.send_command("rc {} 0 0 0".format(x), True)
+
+    def rc_up(self, x: int):
+        self.send_command("rc 0 0 {} 0".format(x), True)
+
+    def rc_down(self, x: int):
+        self.send_command("rc 0 0 {} 0".format(-x), True)
+
+    def rc_rotatec(self, x: int):
+        self.send_command("rc 0 0 0 {}".format(x), True)
+
+    def rc_rotateq(self, x: int):
+        self.send_command("rc 0 0 0 {}".format(-x), True)
 
     def streamon(self):
         self.send_command("streamon")
