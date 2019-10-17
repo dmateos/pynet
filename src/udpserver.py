@@ -23,7 +23,7 @@ class UDPServer:
 
         self.callbacks: List = []
 
-        self._recvdata = ""
+        self._recvdata = EMPTY
         self.socket.bind(("", self.port))
 
     @property
@@ -37,7 +37,7 @@ class UDPServer:
         if data:
             print("data is {}".format(data))
             return data.decode("UTF-8")
-        return ""
+        return EMPTY
 
     def recv_start(self) -> None:
         self.recv_thread.start()
