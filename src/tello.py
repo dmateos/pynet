@@ -25,16 +25,22 @@ class TelloCommand:
 
     def send_command(self, command: str, ignorecheck: bool = False) -> None:
         self.socket.sendto(command.encode("UTF-8"), (self.address, self.port))
+
+        if ignorecheck:
+            return
+
+        # Use the UDPServer to poll for a return to our command and bail if
+        # it takes too long.
+        # Both the UDP polling and the timeout check happen in threads. (2)
         cmd_timer: threading.Timer = threading.Timer(
             self.timeout, self._command_wait_timeout_stop_loop
         )
 
-        if not ignorecheck:
-            cmd_timer.start()
-            while self.tello_state.data == "" and not self.command_timeout:
-                pass
-            cmd_timer.cancel()
-            self.command_timeout = False
+        cmd_timer.start()
+        while self.tello_state.data == "" and not self.command_timeout:
+            pass
+        cmd_timer.cancel()
+        self.command_timeout = False
 
     def _command_wait_timeout_stop_loop(self) -> None:
         self.command_timeout = True

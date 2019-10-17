@@ -56,16 +56,11 @@ def test_tello_send_command_timeout(mock_udpserver, mock_socket):
 
 @patch("tello.socket.socket", autospec=True)
 @patch("tello.udpserver.UDPServer", autospec=True)
-def test_tello_takeoff_command(mock_udpserver, mock_socket):
+def test_tello_takeoff_and_landcommand(mock_udpserver, mock_socket):
     robot = tello.TelloCommand()
     robot.takeoff()
     _assert_socket_sendto("takeoff", mock_socket)
 
-
-@patch("tello.socket.socket", autospec=True)
-@patch("tello.udpserver.UDPServer", autospec=True)
-def test_tello_land_command(mock_udpserver, mock_socket):
-    robot = tello.TelloCommand()
     robot.land()
     _assert_socket_sendto("land", mock_socket)
 
