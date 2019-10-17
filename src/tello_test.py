@@ -56,7 +56,15 @@ def test_tello_send_command_timeout(mock_udpserver, mock_socket):
 
 @patch("tello.socket.socket", autospec=True)
 @patch("tello.udpserver.UDPServer", autospec=True)
-def test_tello_takeoff_and_landcommand(mock_udpserver, mock_socket):
+def test_tello_init_command(mock_udpserver, mock_socket):
+    robot = tello.TelloCommand()
+    robot.command()
+    _assert_socket_sendto("command", mock_socket)
+
+
+@patch("tello.socket.socket", autospec=True)
+@patch("tello.udpserver.UDPServer", autospec=True)
+def test_tello_takeoff_and_land_commands(mock_udpserver, mock_socket):
     robot = tello.TelloCommand()
     robot.takeoff()
     _assert_socket_sendto("takeoff", mock_socket)
@@ -81,8 +89,21 @@ def test_tello_movement_commands(mock_udpserver, mock_socket):
     robot.right(20)
     _assert_socket_sendto("right {}".format(20), mock_socket)
 
-    robot.rotate(20)
+    robot.rotatec(20)
     _assert_socket_sendto("cw {}".format(20), mock_socket)
+
+    robot.rotateq(20)
+    _assert_socket_sendto("ccw {}".format(20), mock_socket)
+
+    for f in ("l", "r", "u", "d"):
+        robot.flip(f)
+        _assert_socket_sendto("flip {}".format(f), mock_socket)
+
+    robot.stop()
+    _assert_socket_sendto("stop", mock_socket)
+
+    robot.go(1, 2, 3, 4)
+    _assert_socket_sendto("go {} {} {} {}".format(1, 2, 3, 4), mock_socket)
 
 
 @patch("tello.socket.socket", autospec=True)

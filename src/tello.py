@@ -21,7 +21,7 @@ class TelloCommand:
         self.tello_state.recv_start()
 
         # Enter SDK mode
-        self.send_command("command", True)
+        self.command()
 
     def send_command(self, command: str, ignorecheck: bool = False) -> None:
         self.socket.sendto(command.encode("UTF-8"), (self.address, self.port))
@@ -46,14 +46,20 @@ class TelloCommand:
         self.command_timeout = True
         print("command timed out")
 
+    def command(self):
+        self.send_command("command")
+
     def takeoff(self) -> None:
         self.send_command("takeoff")
 
     def land(self) -> None:
         self.send_command("land")
 
-    def rotate(self, x: int) -> None:
+    def rotatec(self, x: int) -> None:
         self.send_command("cw {}".format(x))
+
+    def rotateq(self, x: int) -> None:
+        self.send_command("ccw {}".format(x))
 
     def forward(self, x: int) -> None:
         self.send_command("forward {}".format(x))
@@ -66,6 +72,15 @@ class TelloCommand:
 
     def right(self, x: int) -> None:
         self.send_command("right {}".format(x))
+
+    def flip(self, d: str) -> None:
+        self.send_command("flip {}".format(d))
+
+    def stop(self) -> None:
+        self.send_command("stop")
+
+    def go(self, x: int, y: int, z: int, speed: int) -> None:
+        self.send_command("go {} {} {} {}".format(x, y, z, speed))
 
     def rc_forward(self, x: int) -> None:
         self.send_command("rc 0 {} 0 0".format(x), True)
