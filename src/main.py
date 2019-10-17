@@ -36,7 +36,7 @@ def run():
     while True:
         time.sleep(0.5)
         new_stats = statsdata.data
-        if new_stats != "":
+        if new_stats != udpserver.EMPTY:
             print(new_stats)
 
         for e in pygame.event.get():

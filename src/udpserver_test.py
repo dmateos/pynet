@@ -29,7 +29,7 @@ def test_udpserver_binds_to_supplied_socket():
 @patch("udpserver.socket.socket", autospec=True)
 def test_udpserver_data_empty_str_by_default(mock_socket):
     server = udpserver.UDPServer(8889)
-    assert server.data == ""
+    assert server.data == udpserver.EMPTY
 
 
 @patch("udpserver.socket.socket", autospec=True)
@@ -37,7 +37,7 @@ def test_udpserver_resets_data_on_read(mock_socket):
     server = udpserver.UDPServer(8889)
     server._recvdata = "test"
     server.data
-    assert server.data == ""
+    assert server.data == udpserver.EMPTY
 
 
 @patch("udpserver.socket.socket", autospec=True)

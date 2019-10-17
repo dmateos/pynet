@@ -1,7 +1,9 @@
-from typing import Optional
+from typing import Optional, List
 
 import socket
 import threading
+
+EMPTY = ""
 
 
 class UDPServer:
@@ -18,6 +20,8 @@ class UDPServer:
         self.continue_loop: bool = True
         self.recv_thread: threading.Thread = threading.Thread(target=self._recv_loop)
         self._recvdata: str = ""
+
+        self.callbacks: List = []
 
         self._recvdata = ""
         self.socket.bind(("", self.port))

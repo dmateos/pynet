@@ -37,7 +37,7 @@ class TelloCommand:
         )
 
         cmd_timer.start()
-        while self.tello_state.data == "" and not self.command_timeout:
+        while self.tello_state.data == udpserver.EMPTY and not self.command_timeout:
             pass
         cmd_timer.cancel()
         self.command_timeout = False
