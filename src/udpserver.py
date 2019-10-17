@@ -28,8 +28,8 @@ class UDPServer:
 
     @property
     def data(self) -> str:
-        d = self._recvdata
-        self._recvdata = ""
+        d: str = self._recvdata
+        self._recvdata = EMPTY
         return d
 
     def recv_data(self) -> str:
