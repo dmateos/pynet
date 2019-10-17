@@ -1,4 +1,5 @@
 import tello
+import udpserver
 import time
 import pygame
 import pygame.display
@@ -27,10 +28,17 @@ def run():
     pygame.display.init()
     pygame.display.set_mode((1280, 720))
 
+    statsdata = udpserver.UDPServer(8890)
+    statsdata.recv_start()
+
     speed = 30
 
     while True:
         time.sleep(0.5)
+        new_stats = statsdata.data
+        if new_stats != "":
+            print(new_stats)
+
         for e in pygame.event.get():
             if e.type == pygame.locals.KEYDOWN:
                 keyname = pygame.key.name(e.key)
