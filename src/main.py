@@ -60,8 +60,8 @@ def run():
                 if keyname in controls:
                     controls[keyname](robot, SPEED)
             elif e.type == pygame.locals.KEYUP:
+                keyname = pygame.key.name(e.key)
                 if keyname in controls:
-                    key_handler = controls[keyname]
                     controls[keyname](robot, 0)
 
 
