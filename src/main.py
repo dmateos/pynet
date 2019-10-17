@@ -16,13 +16,13 @@ controls = {
     "r": "rc_rotateq",
     "f": "rc_up",
     "g": "rc_down",
-    "tab": lambda drone, speed: drone.takeoff(),
-    "backspace": lambda drone, speed: drone.land(),
+    "tab": lambda robot, speed: robot.takeoff(),
+    "backspace": lambda robot, speed: robot.land(),
 }
 
 
 def run():
-    drone = tello.TelloCommand(3)
+    robot = tello.TelloCommand(3)
 
     pygame.init()
     pygame.display.init()
@@ -45,16 +45,16 @@ def run():
                 if keyname in controls:
                     key_handler = controls[keyname]
                     if type(key_handler) == str:
-                        getattr(drone, key_handler)(speed)
+                        getattr(robot, key_handler)(speed)
                     else:
-                        key_handler(drone, speed)
+                        key_handler(robot, speed)
             elif e.type == pygame.locals.KEYUP:
                 if keyname in controls:
                     key_handler = controls[keyname]
                     if type(key_handler) == str:
-                        getattr(drone, key_handler)(0)
+                        getattr(robot, key_handler)(0)
                     else:
-                        key_handler(drone, 0)
+                        key_handler(robot, 0)
 
 
 if __name__ == "__main__":
